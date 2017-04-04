@@ -5,8 +5,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import concurrent.InstantExecutorService;
-import shopmanager.LocationService;
-import shopmanager.ShopManagerImpl;
 import shopmanager.model.Location;
 import shopmanager.model.Shop;
 import shopmanager.model.Shop.Address;
@@ -20,46 +18,56 @@ public class ShopManagerImplTest {
     @Mock LocationService mockLocationService;
 
     @Test
-    public void testUpdate() {
+    public void testShopIsAdded() {
         when(mockLocationService.findLocation("W1 1AA")).thenReturn(new Location(1.1, 2.2));
         ShopManagerImpl shopManager = new ShopManagerImpl(mockLocationService, new InstantExecutorService());
 
-        Shop shop = new Shop();
-        shop.setShopName("My Shop");
-        Shop.Address address = new Address();
-        address.setNumber(5);
-        address.setPostCode("W1 1AA");
-        shop.setShopAddress(address);
-
-        shopManager.addShop(shop);
-
-
-        assertEquals("My Shop", shopManager.getShop("My Shop").getShopName());
+//        Shop shop = new Shop();
+//        shop.setShopName("My Shop");
+//        Shop.Address address = new Address();
+//        address.setNumber(5);
+//        address.setPostCode("W1 1AA");
+//        shop.setShopAddress(address);
+//
+//        shopManager.addShop(shop);
+//
+//
+//        assertEquals("My Shop", shopManager.getShop("My Shop").getShopName());
     }
 
     @Test
-    public void testLocationUpdate() {
+    public void testShopIsReplaced() {
 
-        Location l = new Location(1.1, 2.2);
-        when(mockLocationService.findLocation("W1 1AA")).thenReturn(l);
-        ShopManagerImpl shopManager = new ShopManagerImpl(mockLocationService, new InstantExecutorService());
+    }
 
-        Shop shop = new Shop();
-        shop.setShopName("My Shop");
-        Shop.Address address = new Address();
-        address.setNumber(5);
-        address.setPostCode("W1 1AA");
-        shop.setShopAddress(address);
+    @Test
+    public void testLocationIsUpdatedAfterShopHasBeenAdded() {
 
-        shopManager.addShop(shop);
-
-
-        assertEquals("My Shop", shopManager.getShop("My Shop").getShopName());
-        assertEquals(l, shopManager.getShop("My Shop").getShopAddress().getLocation());
+//        Location l = new Location(1.1, 2.2);
+//        when(mockLocationService.findLocation("W1 1AA")).thenReturn(l);
+//        ShopManagerImpl shopManager = new ShopManagerImpl(mockLocationService, new InstantExecutorService());
+//
+//        Shop shop = new Shop();
+//        shop.setShopName("My Shop");
+//        Shop.Address address = new Address();
+//        address.setNumber(5);
+//        address.setPostCode("W1 1AA");
+//        shop.setShopAddress(address);
+//
+//        shopManager.addShop(shop);
+//
+//
+//        assertEquals("My Shop", shopManager.getShop("My Shop").getShopName());
+//        assertEquals(l, shopManager.getShop("My Shop").getShopAddress().getLocation());
     }
 
     @Test
     public void testLocationIsNotUpdatedIfShopHasChanged() {
+
+    }
+
+    @Test
+    public void testIfAShopIsAddedAtTheSameTimeByTwoUsersOnlyOneReceivesAnUpdate() {
 
     }
 

@@ -10,6 +10,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class InstantExecutorService implements ExecutorService {
+
+    @Override
+    public void execute(Runnable command) {
+        command.run();
+    }
+
     @Override
     public void shutdown() {
 
@@ -70,10 +76,5 @@ public class InstantExecutorService implements ExecutorService {
     public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit)
         throws InterruptedException, ExecutionException, TimeoutException {
         return null;
-    }
-
-    @Override
-    public void execute(Runnable command) {
-        command.run();
     }
 }

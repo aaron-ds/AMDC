@@ -15,7 +15,7 @@ public class ShopManagerImpl implements ShopManager {
 
     private ConcurrentMap<String, Shop> shopStore = new ConcurrentHashMap();
     private LocationService locationService;
-    private ExecutorService executorService; // = Executors.newFixedThreadPool(10);
+    private ExecutorService executorService;
 
 
     @Autowired
@@ -23,7 +23,6 @@ public class ShopManagerImpl implements ShopManager {
         this.locationService = locationService;
         this.executorService = executorService;
     }
-
 
     @Override
     public Shop addShop(Shop shop) {
@@ -36,8 +35,6 @@ public class ShopManagerImpl implements ShopManager {
 
     @Override
     public Shop findClosestShop(Location location) {
-        //locationService.calculateClosest(location, Arrays.asList(new Location(51.54025020, -0.10882650)));
-
         Shop closest = null;
         double closestDistance = Double.MAX_VALUE;
         for (Shop shop : shopStore.values()) {
@@ -54,22 +51,22 @@ public class ShopManagerImpl implements ShopManager {
         return closest;
     }
 
-    public Shop getShop(String shopName) {
-        return shopStore.get(shopName);
-    }
-
     private void getAndUpdateLocation(Shop shop) {
         executorService.execute( () -> {
             Location location = locationService.findLocation(shop.getShopAddress().getPostCode());
             if (location != null) {
-                Shop shopWithLocation = new Shop();
-                shopWithLocation.setShopName(shop.getShopName());
+//                shopWithLocation.setShopName(shop.getShopName());
                 Address address = shop.getShopAddress();
                 address.setLocation(location);
-                shopWithLocation.setShopAddress(address);
+//                shopWithLocation.setShopAddress(address);
+                Shop shopWithLocation = new Shop(shop.getShopName(), address);
                 shopStore.replace(shop.getShopName(), shop, shopWithLocation);
             }
         });
+    }
+
+    Shop getShop(String shopName) {
+        return shopStore.get(shopName);
     }
 
 }

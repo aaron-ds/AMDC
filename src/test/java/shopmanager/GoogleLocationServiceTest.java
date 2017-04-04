@@ -1,4 +1,6 @@
 package shopmanager;
 
-public class GoogleLocationServiceTest {
+public abstract class GoogleLocationServiceTest {
+
+    public abstract LocationService createLocationService();
 }

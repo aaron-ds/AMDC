@@ -5,6 +5,13 @@ public class Shop {
     private String shopName;
     private Address shopAddress;
 
+    public Shop() {}
+
+    public Shop(String shopName, Address shopAddress) {
+        this.shopName = shopName;
+        this.shopAddress = shopAddress;
+    }
+
     public String getShopName() {
         return shopName;
     }
@@ -51,6 +58,13 @@ public class Shop {
         private int number;
         private String postCode;
         private Location location;
+
+        public Address() {}
+
+        public Address(int number, String postCode) {
+            this.number = number;
+            this.postCode = postCode;
+        }
 
         public int getNumber() {
             return number;
