@@ -1,5 +1,8 @@
 package shopmanager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.google.maps.DistanceMatrixApi;
 import com.google.maps.GeoApiContext;
@@ -9,6 +12,7 @@ import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.GeocodingResult;
 import shopmanager.model.Location;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,28 +22,30 @@ import java.util.stream.Collectors;
 @Component
 public class GoogleLocationService implements LocationService {
 
-    private String apiKey = "AIzaSyCSJxPgsqD4N8Ji9qDj87lQqmkL9aI8KSw";
+    private static final Logger log = LoggerFactory.getLogger(GoogleLocationService.class);
+
+    @Value("${google.apikey}")
+    private String apiKey;
     GeoApiContext context;
 
-    public GoogleLocationService() {
+
+    @PostConstruct
+    public void init() {
         context = new GeoApiContext().setApiKey(apiKey);
     }
 
     @Override
     public Location findLocation(String postCode) {
-
         try {
             GeocodingResult[] results = GeocodingApi.geocode(context, postCode).await();
-            System.out.println(results[0].geometry.location);
+            log.info("Got coordinates <{}> for postCode <{}>", results[0].geometry.location, postCode);
             return new Location(results[0].geometry.location.lat, results[0].geometry.location.lng);
         } catch (ApiException | InterruptedException | IOException e) {
-            e.printStackTrace();
+            log.error("Exception caught when requesting coordinates for <{}>", postCode, e);
         }
         return null;
-
     }
 
-    @Override
     public Location calculateClosest(Location target, Collection<Location> locations) {
         String[] origin = extractCoOrdinates(Arrays.asList(target));
         String[] destinations = extractCoOrdinates(locations);

@@ -41,11 +41,13 @@ public class ShopManagerImpl implements ShopManager {
         Shop closest = null;
         double closestDistance = Double.MAX_VALUE;
         for (Shop shop : shopStore.values()) {
-            double distance = location.distanceTo(shop.getShopAddress().getLocation());
-            if (distance < closestDistance) {
-                System.out.println("distance of " + shop.getShopName() + " is " + distance);
-                closestDistance = distance;
-                closest = shop;
+            if (shop.getShopAddress().getLocation() != null) {
+                double distance = location.distanceTo(shop.getShopAddress().getLocation());
+                if (distance < closestDistance) {
+                    System.out.println("distance of " + shop.getShopName() + " is " + distance);
+                    closestDistance = distance;
+                    closest = shop;
+                }
             }
         }
 
