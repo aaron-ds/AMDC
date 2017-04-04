@@ -3,10 +3,12 @@ package shopmanager.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import shopmanager.ShopManager;
+import shopmanager.model.Location;
 import shopmanager.model.Shop;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -23,19 +25,21 @@ public class ShopManagerController {
         this.shopManager = shopManager;
     }
 
-    @RequestMapping(method=POST, name="/shop")
-    public String handleCreateShop(@RequestBody String shop) {
-        //do some validation on the shop json
-        Gson gson = new Gson();
-        Shop s = gson.fromJson(shop, Shop.class);
-        System.out.println("POST called with " + s.getShopName());
-        return "shop was created";
+    @RequestMapping(method=POST, name="/shop", produces = "application/json")
+    public Shop handleCreateShop(@RequestBody Shop shop) {
+        System.out.println("POST called with " + shop.getShopName());
+        Shop existingShop = shopManager.addShop(shop);
+        return existingShop;
+//        return existingShop != null ? existingShop.getShopName() : "{\"response\": \"success\"}";
     }
 
     @RequestMapping(method=GET, name="/shop")
-    public String handleFindNearestShop() {
-        //do some validation of the location json
+    public String handleFindNearestShop(@RequestParam("lat") String latitude, @RequestParam("long") String longitude) {
+        //do some validation of the parameters
+
+        Shop shop = shopManager.findClosestShop(new Location(Double.valueOf(latitude), Double.valueOf(longitude)));
         System.out.println("GET called");
-        return "found a shop";
+        System.out.println(shop.getShopName());
+        return "lat = " + latitude + ", long = " + longitude;
     }
 }

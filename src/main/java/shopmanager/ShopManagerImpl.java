@@ -9,7 +9,6 @@ import shopmanager.model.Shop.Address;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Component
 public class ShopManagerImpl implements ShopManager {
@@ -37,8 +36,20 @@ public class ShopManagerImpl implements ShopManager {
 
     @Override
     public Shop findClosestShop(Location location) {
-        //get all of the locations of the shops
-        return null;
+        //locationService.calculateClosest(location, Arrays.asList(new Location(51.54025020, -0.10882650)));
+
+        Shop closest = null;
+        double closestDistance = Double.MAX_VALUE;
+        for (Shop shop : shopStore.values()) {
+            double distance = location.distanceTo(shop.getShopAddress().getLocation());
+            if (distance < closestDistance) {
+                System.out.println("distance of " + shop.getShopName() + " is " + distance);
+                closestDistance = distance;
+                closest = shop;
+            }
+        }
+
+        return closest;
     }
 
     public Shop getShop(String shopName) {

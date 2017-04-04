@@ -56,6 +56,10 @@ public class ShopManagerImplTest {
         assertEquals(l, shopManager.getShop("My Shop").getShopAddress().getLocation());
     }
 
+    @Test
+    public void testLocationIsNotUpdatedIfShopHasChanged() {
+
+    }
 
 
 }
